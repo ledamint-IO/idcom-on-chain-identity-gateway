@@ -4,7 +4,7 @@ import {
   gatekeeperKeyFlag,
   gatekeeperNetworkKeyFlag,
 } from "../util/oclif/flags";
-import { Keypair, PublicKey } from "@solana/web3.js";
+import { Keypair, PublicKey } from "@safecoin/web3.js";
 import { airdropTo } from "../util";
 import { GatekeeperNetworkService } from "../service";
 import { getConnectionFromEnv } from "../util/oclif/utils";

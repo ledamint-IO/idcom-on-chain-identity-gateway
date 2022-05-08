@@ -5,7 +5,7 @@ import {
   PublicKey,
   SystemProgram,
   Transaction,
-} from "@solana/web3.js";
+} from "@safecoin/web3.js";
 import { SOLANA_COMMITMENT } from "../src/util/constants";
 import { airdropTo, GatekeeperService } from "../src";
 import { homedir } from "os";

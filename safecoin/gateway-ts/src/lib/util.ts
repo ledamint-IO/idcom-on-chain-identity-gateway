@@ -4,7 +4,7 @@ import {
   Connection,
   GetProgramAccountsConfig,
   PublicKey,
-} from "@solana/web3.js";
+} from "@safecoin/web3.js";
 import {
   GATEKEEPER_NONCE_SEED_STRING,
   GATEWAY_TOKEN_ADDRESS_SEED,

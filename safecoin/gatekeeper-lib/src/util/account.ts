@@ -1,4 +1,4 @@
-import { Keypair, Connection, PublicKey, clusterApiUrl } from "@solana/web3.js";
+import { Keypair, Connection, PublicKey, clusterApiUrl } from "@safecoin/web3.js";
 import fs from "node:fs";
 
 export const MIN_AIRDROP_BALANCE = 100_000_000;

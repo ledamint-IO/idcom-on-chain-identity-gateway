@@ -1,5 +1,5 @@
 import { Command, Flags } from "@oclif/core";
-import { PublicKey } from "@solana/web3.js";
+import { PublicKey } from "@safecoin/web3.js";
 import {
   clusterFlag,
   gatekeeperKeyFlag,

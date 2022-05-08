@@ -9,7 +9,7 @@ import {
   PublicKey,
   Transaction,
   SystemProgram,
-} from "@solana/web3.js";
+} from "@safecoin/web3.js";
 import sinon from "sinon";
 import { PROGRAM_ID } from "../src/util/constants";
 import {
@@ -18,8 +18,8 @@ import {
   GatewayTokenState,
   getGatewayTokenAddressForOwnerAndGatekeeperNetwork,
   State,
-} from "@identity.com/solana-gateway-ts";
-import * as GatewayTs from "@identity.com/solana-gateway-ts";
+} from "@ledamint-io/idcom-solana-gateway-ts";
+import * as GatewayTs from "@ledamint-io/idcom-solana-gateway-ts";
 import {
   GatekeeperService,
   SendableDataTransaction,
@@ -27,7 +27,7 @@ import {
   SentTransaction,
   SimpleGatekeeperService,
 } from "../src";
-import { Active } from "@identity.com/solana-gateway-ts/dist/lib/GatewayTokenData";
+import { Active } from "@ledamint-io/idcom-solana-gateway-ts/dist/lib/GatewayTokenData";
 
 chai.use(sinonChai);
 chai.use(chaiSubset);

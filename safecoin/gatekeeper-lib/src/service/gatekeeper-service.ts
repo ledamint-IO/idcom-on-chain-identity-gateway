@@ -4,7 +4,7 @@ import {
   PublicKey,
   Transaction,
   TransactionInstruction,
-} from "@solana/web3.js";
+} from "@safecoin/web3.js";
 import {
   freeze,
   GatewayToken,
@@ -16,7 +16,7 @@ import {
   getGatewayTokenAddressForOwnerAndGatekeeperNetwork,
   getGatekeeperAccountAddress,
   findGatewayToken,
-} from "@identity.com/solana-gateway-ts";
+} from "@ledamint-io/idcom-solana-gateway-ts";
 
 import { SendableDataTransaction, SendableTransaction } from "../util";
 import { TransactionHolder } from "../util/connection";

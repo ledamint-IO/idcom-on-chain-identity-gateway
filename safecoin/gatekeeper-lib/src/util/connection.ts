@@ -11,7 +11,7 @@ import {
   Transaction,
   TransactionError,
   TransactionSignature,
-} from "@solana/web3.js";
+} from "@safecoin/web3.js";
 import { SOLANA_COMMITMENT } from "./constants";
 
 export type ExtendedCluster = Cluster | "localnet" | "civicnet";

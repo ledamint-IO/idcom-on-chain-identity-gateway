@@ -1,4 +1,4 @@
-import { Connection, Keypair, PublicKey } from "@solana/web3.js";
+import { Connection, Keypair, PublicKey } from "@safecoin/web3.js";
 import { ExtendedCluster, getClusterUrl, getConnection } from "../connection";
 import { airdropTo } from "../account";
 import { GatekeeperService } from "../../service";

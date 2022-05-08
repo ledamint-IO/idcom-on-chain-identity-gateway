@@ -1,5 +1,5 @@
 import { Command, Flags } from "@oclif/core";
-import { Keypair } from "@solana/web3.js";
+import { Keypair } from "@safecoin/web3.js";
 
 import { airdropTo } from "../util";
 import { GatekeeperNetworkService } from "../service";
@@ -7,7 +7,7 @@ import { clusterFlag, gatekeeperNetworkKeyFlag } from "../util/oclif/flags";
 import {
   NetworkFeature,
   UserTokenExpiry,
-} from "@identity.com/solana-gateway-ts";
+} from "@ledamint-io/idcom-solana-gateway-ts";
 import { getConnectionFromEnv } from "../util/oclif/utils";
 
 type featureOperation = "add" | "remove" | "get";

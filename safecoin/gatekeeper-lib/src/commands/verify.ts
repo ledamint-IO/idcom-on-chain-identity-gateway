@@ -1,9 +1,9 @@
 import { Command, Flags } from "@oclif/core";
-import { PublicKey } from "@solana/web3.js";
+import { PublicKey } from "@safecoin/web3.js";
 import { clusterFlag, gatekeeperNetworkPubkeyFlag } from "../util/oclif/flags";
 import { prettyPrint } from "../util/token";
 import { getConnectionFromEnv } from "../util/oclif/utils";
-import { findGatewayToken } from "@identity.com/solana-gateway-ts";
+import { findGatewayToken } from "@ledamint-io/idcom-solana-gateway-ts";
 
 export default class Verify extends Command {
   static description = "Verify a gateway token";

@@ -1,5 +1,5 @@
 import { GatewayTokenData, GatewayTokenState } from "../../src";
-import { PublicKey } from "@solana/web3.js";
+import { PublicKey } from "@safecoin/web3.js";
 import { AssignablePublicKey } from "../../src/lib/AssignablePublicKey";
 
 export const getAccountWithState = (

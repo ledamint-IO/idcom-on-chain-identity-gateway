@@ -1,9 +1,9 @@
-import { Connection, PublicKey } from "@solana/web3.js";
+import { Connection, PublicKey } from "@safecoin/web3.js";
 import {
   Account,
   getAccount,
 } from "@solana/spl-token";
-import { GatewayToken } from "@identity.com/solana-gateway-ts";
+import { GatewayToken } from "@ledamint-io/idcom-solana-gateway-ts";
 
 export const gatewayTokenInfo = async (
   connection: Connection,

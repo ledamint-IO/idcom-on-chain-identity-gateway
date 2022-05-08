@@ -1,4 +1,4 @@
-import { Connection, Keypair, PublicKey } from "@solana/web3.js";
+import { Connection, Keypair, PublicKey } from "@safecoin/web3.js";
 import { SOLANA_COMMITMENT } from "../src/util/constants";
 import { GatekeeperService } from "../src/service/GatekeeperService";
 import { homedir } from "os";

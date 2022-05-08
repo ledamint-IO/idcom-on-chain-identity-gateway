@@ -1,0 +1,3 @@
+    "@safecoin/web3.js": "^1.32.0",
+    by
+    "@safecoin/web3.js": "^1.29.4",

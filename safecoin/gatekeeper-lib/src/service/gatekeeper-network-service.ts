@@ -1,4 +1,4 @@
-import { Keypair, Connection, PublicKey, Transaction } from "@solana/web3.js";
+import { Keypair, Connection, PublicKey, Transaction } from "@safecoin/web3.js";
 import {
   addFeatureToNetwork,
   addGatekeeper,
@@ -8,7 +8,7 @@ import {
   NetworkFeature,
   removeFeatureFromNetwork,
   revokeGatekeeper,
-} from "@identity.com/solana-gateway-ts";
+} from "@ledamint-io/idcom-solana-gateway-ts";
 import { SendableDataTransaction, SendableTransaction } from "../util";
 import { HashOrNonce } from "../util/connection";
 import {

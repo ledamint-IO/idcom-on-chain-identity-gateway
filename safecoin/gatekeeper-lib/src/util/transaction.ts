@@ -1,10 +1,10 @@
-import { PROGRAM_ID } from "@identity.com/solana-gateway-ts";
+import { PROGRAM_ID } from "@ledamint-io/idcom-solana-gateway-ts";
 import {
   Commitment,
   Connection,
   PublicKey,
   Transaction,
-} from "@solana/web3.js";
+} from "@safecoin/web3.js";
 import R from "ramda";
 import { HashOrNonce } from "./connection";
 
