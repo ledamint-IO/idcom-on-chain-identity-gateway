@@ -1,5 +1,5 @@
-import { Command, Flags } from "@oclif/core";
-import { PublicKey } from "@safecoin/web3.js";
+import { Command, flags } from "@oclif/command";
+import { PublicKey } from "@solana/web3.js";
 import {
   clusterFlag,
   gatekeeperKeyFlag,
@@ -17,7 +17,7 @@ Revoked
   ];
 
   static flags = {
-    help: Flags.help({ char: "h" }),
+    help: flags.help({ char: "h" }),
     gatekeeperKey: gatekeeperKeyFlag(),
     gatekeeperNetworkKey: gatekeeperNetworkPubkeyFlag(),
     cluster: clusterFlag(),
@@ -28,13 +28,12 @@ Revoked
       name: "gatewayToken",
       required: true,
       description: "The gateway token to revoke",
-      // eslint-disable-next-line @typescript-eslint/require-await
-      parse: async (input: string): Promise<PublicKey> => new PublicKey(input),
+      parse: (input: string) => new PublicKey(input),
     },
   ];
 
-  async run(): Promise<void> {
-    const { args, flags } = await this.parse(Revoke);
+  async run() {
+    const { args, flags } = this.parse(Revoke);
 
     const { gatewayToken, gatekeeper, service } =
       await getTokenUpdateProperties(args, flags);
@@ -43,10 +42,7 @@ Revoked
      ${gatewayToken.toBase58()}
      by gatekeeper ${gatekeeper.publicKey.toBase58()}`);
 
-    await service
-      .revoke(gatewayToken)
-      .then((t) => t.send())
-      .then((t) => t.confirm());
+    const token = await service.revoke(gatewayToken);
 
     this.log("Revoked");
   }

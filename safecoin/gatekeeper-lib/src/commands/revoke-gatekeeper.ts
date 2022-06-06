@@ -1,13 +1,12 @@
-import { Command, Flags } from "@oclif/core";
+import { Command, flags } from "@oclif/command";
 import {
   clusterFlag,
   gatekeeperKeyFlag,
   gatekeeperNetworkKeyFlag,
 } from "../util/oclif/flags";
-import { Keypair, PublicKey } from "@safecoin/web3.js";
-import { airdropTo } from "../util";
+import { Keypair, PublicKey } from "@solana/web3.js";
+import { airdropTo, getConnection } from "../util";
 import { GatekeeperNetworkService } from "../service";
-import { getConnectionFromEnv } from "../util/oclif/utils";
 
 export default class RevokeGatekeeper extends Command {
   static description = "Revoke a gatekeeper from a network";
@@ -18,7 +17,7 @@ export default class RevokeGatekeeper extends Command {
   ];
 
   static flags = {
-    help: Flags.help({ char: "h" }),
+    help: flags.help({ char: "h" }),
     gatekeeperKey: gatekeeperKeyFlag(),
     gatekeeperNetworkKey: gatekeeperNetworkKeyFlag(),
     cluster: clusterFlag(),
@@ -29,21 +28,20 @@ export default class RevokeGatekeeper extends Command {
       name: "address",
       required: true,
       description: "The address of the gatekeeper to revoke from the network",
-      // eslint-disable-next-line @typescript-eslint/require-await
-      parse: async (input: string): Promise<PublicKey> => new PublicKey(input),
+      parse: (input: string) => new PublicKey(input),
     },
   ];
 
-  async run(): Promise<void> {
-    const { args, flags } = await this.parse(RevokeGatekeeper);
+  async run() {
+    const { args, flags } = this.parse(RevokeGatekeeper);
 
-    const gatekeeper: PublicKey = args.address as PublicKey;
+    const gatekeeper: PublicKey = args.address;
     const gatekeeperNetwork = flags.gatekeeperNetworkKey as Keypair;
     this.log(`Revoking: 
       gatekeeper ${gatekeeper.toBase58()}
       from network ${gatekeeperNetwork.publicKey.toBase58()}`);
 
-    const connection = getConnectionFromEnv(flags.cluster);
+    const connection = getConnection(flags.cluster);
 
     await airdropTo(
       connection,
@@ -53,18 +51,12 @@ export default class RevokeGatekeeper extends Command {
 
     const networkService = new GatekeeperNetworkService(
       connection,
+      gatekeeperNetwork,
       gatekeeperNetwork
     );
-    const gatekeeperAccount = await networkService
-      .revokeGatekeeper(gatekeeper)
-      .then((t) => t.send())
-      .then((t) => t.confirm());
+    const gatekeeperAccount = await networkService.revokeGatekeeper(gatekeeper);
     this.log(
-      `Revoked gatekeeper from network. Gatekeeper account: ${
-        gatekeeperAccount
-          ? gatekeeperAccount.toBase58()
-          : "//Gatekeeper Account Undefined//"
-      }`
+      `Revoked gatekeeper from network. Gatekeeper account: ${gatekeeperAccount.toBase58()}`
     );
   }
 }

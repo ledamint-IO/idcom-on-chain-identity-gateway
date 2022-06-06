@@ -1,6 +1,6 @@
-import { Connection, Keypair, PublicKey } from "@safecoin/web3.js";
+import { Connection, Keypair, PublicKey } from "@solana/web3.js";
 import { SOLANA_COMMITMENT } from "../src/util/constants";
-import { GatekeeperNetworkService } from "../src";
+import { GatekeeperNetworkService } from "../src/service/GatekeeperNetworkService";
 import { homedir } from "os";
 import * as path from "path";
 
@@ -18,14 +18,14 @@ const connection = new Connection(
   SOLANA_COMMITMENT
 );
 
-const service = new GatekeeperNetworkService(connection, myKeypair);
+const service = new GatekeeperNetworkService(connection, myKeypair, myKeypair);
 
 const gatekeeperAuthority = new PublicKey(
   "civQnFJNKpRpyvUejct4mfExBi7ZzRXu6U3hXWMxASn"
 ); //Keypair.generate().publicKey;
 
 (async function () {
-  const gatekeeperAccount = await service.addGatekeeper(gatekeeperAuthority).then(sendableDataTx => sendableDataTx.data());
+  const gatekeeperAccount = await service.addGatekeeper(gatekeeperAuthority);
 
   console.log(gatekeeperAccount.toBase58());
 })().catch((error) => console.error(error));

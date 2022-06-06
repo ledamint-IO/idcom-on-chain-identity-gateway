@@ -2,7 +2,7 @@
 
 use {
     num_derive::FromPrimitive,
-    solana_program::{decode_error::DecodeError, program_error::ProgramError},
+    safecoin_program::{decode_error::DecodeError, program_error::ProgramError},
     thiserror::Error,
 };
 
@@ -40,14 +40,6 @@ pub enum GatewayError {
     /// The account is not owned by the gateway program
     #[error("The account is not owned by the gateway program")]
     IncorrectProgramId,
-
-    /// The gateway token has expired
-    #[error("The gateway token has expired")]
-    TokenExpired,
-
-    /// The passed gatekeeper account is not valid
-    #[error("The passed gatekeeper account is not valid")]
-    InvalidGatekeeperAccount,
 }
 impl From<GatewayError> for ProgramError {
     fn from(e: GatewayError) -> Self {

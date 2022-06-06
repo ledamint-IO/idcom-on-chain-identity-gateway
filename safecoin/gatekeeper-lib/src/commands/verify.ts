@@ -1,9 +1,13 @@
-import { Command, Flags } from "@oclif/core";
-import { PublicKey } from "@safecoin/web3.js";
-import { clusterFlag, gatekeeperNetworkPubkeyFlag } from "../util/oclif/flags";
+import { findGatewayTokens } from "@identity.com/solana-gateway-ts";
+import { Command, flags } from "@oclif/command";
+import { Keypair, PublicKey } from "@solana/web3.js";
+import { getConnection } from "../util";
+import {
+  clusterFlag,
+  gatekeeperNetworkKeyFlag,
+  gatekeeperNetworkPubkeyFlag,
+} from "../util/oclif/flags";
 import { prettyPrint } from "../util/token";
-import { getConnectionFromEnv } from "../util/oclif/utils";
-import { findGatewayToken } from "@ledamint-io/idcom-solana-gateway-ts";
 
 export default class Verify extends Command {
   static description = "Verify a gateway token";
@@ -22,7 +26,7 @@ export default class Verify extends Command {
   ];
 
   static flags = {
-    help: Flags.help({ char: "h" }),
+    help: flags.help({ char: "h" }),
     gatekeeperNetworkKey: gatekeeperNetworkPubkeyFlag(),
     cluster: clusterFlag(),
   };
@@ -32,35 +36,32 @@ export default class Verify extends Command {
       name: "owner",
       required: true,
       description: "The gateway token to revoke",
-      // eslint-disable-next-line @typescript-eslint/require-await
-      parse: async (input: string): Promise<PublicKey> => new PublicKey(input),
+      parse: (input: string) => new PublicKey(input),
     },
   ];
 
-  async run(): Promise<void> {
-    const { args, flags } = await this.parse(Verify);
+  async run() {
+    const { args, flags } = this.parse(Verify);
 
     const gatekeeperNetwork = flags.gatekeeperNetworkKey as PublicKey;
 
-    const connection = getConnectionFromEnv(flags.cluster);
-
-    // ? Would this be the correct type for owner?
-    const owner: PublicKey = args.owner as PublicKey;
+    const connection = getConnection(flags.cluster);
 
     this.log(
-      `Verifying wallet ${owner.toBase58()} has a gateway token in the network ${gatekeeperNetwork.toBase58()}`
+      `Verifying wallet ${args.owner.toBase58()} has a gateway token in the network ${gatekeeperNetwork.toBase58()}`
     );
-    const token = await findGatewayToken(
+    const tokens = await findGatewayTokens(
       connection,
       args.owner,
-      gatekeeperNetwork
+      gatekeeperNetwork,
+      true
     );
 
-    if (!token) {
-      this.log("No token found for " + owner.toBase58());
+    if (!tokens.length) {
+      this.log("No token found for " + args.owner.toBase58());
       return;
     }
 
-    this.log(prettyPrint(token));
+    tokens.map((t) => this.log(prettyPrint(t)));
   }
 }

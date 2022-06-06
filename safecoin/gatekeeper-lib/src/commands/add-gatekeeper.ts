@@ -1,14 +1,13 @@
-import { Command, Flags } from "@oclif/core";
-import { Keypair, PublicKey } from "@safecoin/web3.js";
+import { Command, flags } from "@oclif/command";
+import { Keypair, PublicKey } from "@solana/web3.js";
 
-import { airdropTo } from "../util";
-import { GatekeeperNetworkService } from "../service";
+import { airdropTo, getConnection } from "../util";
+import { GatekeeperNetworkService } from "../service/GatekeeperNetworkService";
 import {
   clusterFlag,
   gatekeeperKeyFlag,
   gatekeeperNetworkKeyFlag,
 } from "../util/oclif/flags";
-import { getConnectionFromEnv } from "../util/oclif/utils";
 
 export default class AddGatekeeper extends Command {
   static description = "Add a gatekeeper to a network";
@@ -19,7 +18,7 @@ export default class AddGatekeeper extends Command {
   ];
 
   static flags = {
-    help: Flags.help({ char: "h" }),
+    help: flags.help({ char: "h" }),
     gatekeeperKey: gatekeeperKeyFlag(),
     gatekeeperNetworkKey: gatekeeperNetworkKeyFlag(),
     cluster: clusterFlag(),
@@ -30,21 +29,20 @@ export default class AddGatekeeper extends Command {
       name: "address",
       required: true,
       description: "The address of the gatekeeper to add to the network",
-      // eslint-disable-next-line @typescript-eslint/require-await
-      parse: async (input: string): Promise<PublicKey> => new PublicKey(input),
+      parse: (input: string) => new PublicKey(input),
     },
   ];
 
-  async run(): Promise<void> {
-    const { args, flags } = await this.parse(AddGatekeeper);
+  async run() {
+    const { args, flags } = this.parse(AddGatekeeper);
 
-    const gatekeeper: PublicKey = args.address as PublicKey;
+    const gatekeeper: PublicKey = args.address;
     const gatekeeperNetwork = flags.gatekeeperNetworkKey as Keypair;
     this.log(`Adding:
       gatekeeper ${gatekeeper.toBase58()} 
       to network ${gatekeeperNetwork.publicKey.toBase58()}`);
 
-    const connection = getConnectionFromEnv(flags.cluster);
+    const connection = getConnection(flags.cluster);
 
     await airdropTo(
       connection,
@@ -54,18 +52,12 @@ export default class AddGatekeeper extends Command {
 
     const networkService = new GatekeeperNetworkService(
       connection,
+      gatekeeperNetwork,
       gatekeeperNetwork
     );
-    const gatekeeperAccount = await networkService
-      .addGatekeeper(gatekeeper)
-      .then((t) => t.send())
-      .then((t) => t.confirm());
+    const gatekeeperAccount = await networkService.addGatekeeper(gatekeeper);
     this.log(
-      `Added gatekeeper to network. Gatekeeper account: ${
-        gatekeeperAccount
-          ? gatekeeperAccount?.toBase58()
-          : "//GatekeeperAccount was undefined//"
-      }`
+      `Added gatekeeper to network. Gatekeeper account: ${gatekeeperAccount.toBase58()}`
     );
   }
 }

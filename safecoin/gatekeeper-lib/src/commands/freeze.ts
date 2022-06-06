@@ -1,5 +1,5 @@
-import { Command, Flags } from "@oclif/core";
-import { PublicKey } from "@safecoin/web3.js";
+import { Command, flags } from "@oclif/command";
+import { PublicKey } from "@solana/web3.js";
 import {
   clusterFlag,
   gatekeeperKeyFlag,
@@ -17,7 +17,7 @@ Frozen
   ];
 
   static flags = {
-    help: Flags.help({ char: "h" }),
+    help: flags.help({ char: "h" }),
     gatekeeperKey: gatekeeperKeyFlag(),
     gatekeeperNetworkKey: gatekeeperNetworkPubkeyFlag(),
     cluster: clusterFlag(),
@@ -28,13 +28,12 @@ Frozen
       name: "gatewayToken",
       required: true,
       description: "The gateway token to freeze",
-      // eslint-disable-next-line @typescript-eslint/require-await
-      parse: async (input: string): Promise<PublicKey> => new PublicKey(input),
+      parse: (input: string) => new PublicKey(input),
     },
   ];
 
-  async run(): Promise<void> {
-    const { args, flags } = await this.parse(Freeze);
+  async run() {
+    const { args, flags } = this.parse(Freeze);
 
     const { gatewayToken, gatekeeper, service } =
       await getTokenUpdateProperties(args, flags);
@@ -43,11 +42,8 @@ Frozen
      ${gatewayToken.toBase58()}
      by gatekeeper ${gatekeeper.publicKey.toBase58()}`);
 
-    const frozenToken = await service
-      .freeze(gatewayToken)
-      .then((t) => t.send())
-      .then((t) => t.confirm());
+    const token = await service.freeze(gatewayToken);
 
-    this.log("Frozen token", frozenToken?.publicKey.toBase58());
+    this.log("Frozen token", token.publicKey.toBase58());
   }
 }
